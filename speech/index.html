@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Text To Speech Converter</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Text To Speech Converter</h1>
+    </header>
+    
+    <div id="container">
+        <h1>Text To Speech</h1>
+        <textarea id="textToSpeak" placeholder="Enter text to speak"></textarea>
+        <select id="voiceList"></select>
+        <button onclick="speak()">Text To Speech</button>
+    </div>
+    <footer>
+        <div>Designed by &#129505; Gowtham</div>
+        <div class="social-icons">
+            <a href="https://www.linkedin.com/in/me/" class="fab fa-linkedin" aria-label="LinkedIn" target="_blank"></a>
+            <a href="https://github.com/Akash21Gowtham" class="fab fa-github" aria-label="GitHub" target="_blank"></a>
+            <a href="mailto:gowthamsajay701@gmail.com" class="fas fa-envelope" aria-label="Mail" target="_blank"></a>
+            <a href="https://x.com/Gowthamr2022455" class="fab fa-twitter" aria-label="Twitter" target="_blank"></a>
+        </div>
+    </footer>
+    <!-- Importing the JavaScript file -->
+    <script>
+        var synth = window.speechSynthesis;
+        var speech = new SpeechSynthesisUtterance();
+        var voiceList = document.getElementById('voiceList');
+
+        function voices() {
+            voiceList.innerHTML = ''; // Clear existing options
+            for (let voice of synth.getVoices()) {
+                let selected = voice.name === "Google US English" ? "selected" : "";
+                let option = `<option value="${voice.name}" ${selected}>${voice.name} (${voice.lang})</option>`;
+                voiceList.insertAdjacentHTML("beforeend", option);
+            }
+        }
+
+        synth.addEventListener("voiceschanged", voices);
+
+        function speak() {
+            speech.text = document.getElementById('textToSpeak').value;
+            speech.voice = synth.getVoices().find(voice => voice.name === voiceList.value);
+            speech.rate = 1;
+            speech.volume = 1; // Volume should be between 0 and 1
+            speech.pitch = 1;
+
+            synth.speak(speech);
+        }
+
+        // Load voices immediately if available
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = voices;
+        }
+    </script>
+    <script src="./script.js"></script>
+</body>
+</html>
